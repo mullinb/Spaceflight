@@ -110,15 +110,14 @@ var render = function() {
     pivotPoint.rotation.y += 0.05;
     pivotPoint2.rotation.y += 0.01;
     renderer.render(scene, camera)
-
 }
 
-
+var i = 0;
+var cylinder = []
 
 
 var map = {};
 onkeydown = onkeyup = function(e){
-    console.log(camera.getWorldDirection())
     e = e || event;
     map[e.key] = e.type == 'keydown';
     if (map["a"]) {
@@ -158,10 +157,26 @@ onkeydown = onkeyup = function(e){
         e.preventDefault();
         camera.rotateX(3 * -.0174533)
     }
-    if (map["x"]) {
+    if (map[" "]) {
         e.preventDefault()
-        camera.lookAt(1, 1, 1);
+        let geometry = new THREE.CylinderGeometry( 2, 2, 34, 32 );
+        let material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
+        cylinder[i] = new THREE.Mesh( geometry, material );
+        cylinder[i].position.x = controls.cameraPositionX;
+        cylinder[i].position.y = controls.cameraPositionY;
+        cylinder[i].position.z = controls.cameraPositionZ;
+        scene.add(cylinder[i]);
+        console.log("hi");
+        // var renderLaser = function() {
+        //     requestAnimationFrame(render)
+        //     cylinder[i].position.x += 30 * (camera.getWorldDirection().x);
+        //     cylinder[i].position.y += 30 * (camera.getWorldDirection().y);
+        //     cylinder[i].position.z += 30 * (camera.getWorldDirection().z);
+        // }
+        // renderLaser();
+        i++
     }
+    // if (map["space"])
 
 }
 
