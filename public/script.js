@@ -24,7 +24,6 @@ var geometry = new THREE.SphereGeometry( 10, 32, 32 );
 var material = new THREE.MeshPhongMaterial();
 material.map = new THREE.TextureLoader().load('/earthmap4k.jpg');
 var earthMesh = new THREE.Mesh(geometry, material);
-earthMesh.rotation.y = 0,401426;
 scene.add(earthMesh);
 
 var ringGeometry = new THREE.RingGeometry( 15,17 , 40, 40 );
@@ -70,30 +69,23 @@ mesh.receiveShadow = true;
 var controls = new function() {
     this.textColor = 0xffae23
     this.guiRotationY = 0.005
+    this.guiRotationX = 0.05
     this.cameraPositionX = 0.005
     this.cameraPositionY = 0.005
     this.cameraPositionZ = 0.005
-    this.cameraAngleX = 0.005
-    this.cameraAngleY = 0.005
-    this.cameraAngleZ = 0.005
 }
 
 var gui = new dat.GUI()
+gui.add(controls, 'guiRotationX', 0, 1)
 gui.add(controls, 'guiRotationY', 0, .2)
 gui.add(controls, 'cameraPositionX', -200, 200)
 gui.add(controls, 'cameraPositionY', -200, 200)
 gui.add(controls, 'cameraPositionZ', -200, 200)
-gui.add(controls, 'cameraAngleX', -180, 180)
-gui.add(controls, 'cameraAngleY', -180, 180)
-gui.add(controls, 'cameraAngleZ', -180, 180)
 
 gui.addColor(controls, 'textColor').onChange(function (e) {
     textMesh.material.color = new THREE.Color(e)
 })
 
-// var imagePrefix = "/";
-// var urls = [ 'space2.jpg', 'space2.jpg', 'space2.jpg', 'space2.jpg', 'space2.jpg', 'space2.jpg' ];
-// var skyBox = new THREE.CubeTextureLoader().setPath(imagePrefix).load(urls);
 var boxGeometry = new THREE.BoxGeometry( 5000, 5000, 5000 );
 var boxMaterial = new THREE.MeshPhongMaterial( { side: THREE.BackSide} );
 boxMaterial.map = new THREE.TextureLoader().load('/space2.jpg');
@@ -110,6 +102,7 @@ var render = function() {
     camera.position.y = controls.cameraPositionY
     camera.position.z = controls.cameraPositionZ
     earthMesh.rotation.y += controls.guiRotationY
+    earthMesh.rotation.x = controls.guiRotationX
     mesh.rotation.x += .035
     mesh.rotation.y += .085
     mesh.rotation.z += .135
