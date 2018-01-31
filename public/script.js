@@ -52,128 +52,138 @@ var initScene = function () {
     pivotPoint = new THREE.Object3D();
     pivotPoint2 = new THREE.Object3D();
 
-    scene.add( moon );
-    earthMesh.add(pivotPoint2);
-    pivotPoint2.add(sun);
-    pivotPoint2.add(light);
+scene.add(moon);
+earthMesh.add(pivotPoint2);
+pivotPoint2.add(sun);
+pivotPoint2.add(light);
 
     pivotPoint.add(moon);
     earthMesh.add(pivotPoint);
 
+earthMesh.castShadow = true;
+earthMesh.receiveShadow = true;
+moon.castShadow = true;
+moon.receiveShadow = true;
+mesh.castShadow = true;
+mesh.receiveShadow = true;
 
-    earthMesh.castShadow = true;
-    earthMesh.receiveShadow = true;
-    moon.castShadow = true;
-    moon.receiveShadow = true;
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
+var boxGeometry = new THREE.BoxGeometry( 10000, 10000, 10000 );
+var boxMaterial = new THREE.MeshPhongMaterial( { side: THREE.BackSide} );
+boxMaterial.map = new THREE.TextureLoader().load('/space2.jpg');
+var boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
 
+scene.add(boxMesh);
 
-
-    var controls = new function() {
-        this.textColor = 0xffae23
-        this.guiRotationY = 0.005
-        this.cameraPositionX = 0.005
-        this.cameraPositionY = 0.005
-        this.cameraPositionZ = 0.005
-        this.cameraAngleX = 0.005
-        this.cameraAngleY = 0.005
-        this.cameraAngleZ = 0.005
-    }
-
-    var gui = new dat.GUI()
-    gui.add(controls, 'guiRotationY', 0, .2)
-    gui.add(controls, 'cameraPositionX', -200, 200)
-    gui.add(controls, 'cameraPositionY', -200, 200)
-    gui.add(controls, 'cameraPositionZ', -200, 200)
-    gui.add(controls, 'cameraAngleX', -180, 180)
-    gui.add(controls, 'cameraAngleY', -180, 180)
-    gui.add(controls, 'cameraAngleZ', -180, 180)
-
-    gui.addColor(controls, 'textColor').onChange(function (e) {
-        textMesh.material.color = new THREE.Color(e)
-    })
-
-    // var imagePrefix = "/";
-    // var urls = [ 'space2.jpg', 'space2.jpg', 'space2.jpg', 'space2.jpg', 'space2.jpg', 'space2.jpg' ];
-    // var skyBox = new THREE.CubeTextureLoader().setPath(imagePrefix).load(urls);
-    var boxGeometry = new THREE.BoxGeometry( 5000, 5000, 5000 );
-    var boxMaterial = new THREE.MeshPhongMaterial( { side: THREE.BackSide} );
-    boxMaterial.map = new THREE.TextureLoader().load('/space2.jpg');
-    var boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
-
-    scene.add(boxMesh);
-
-
-
-
-    var render = function() {
-        requestAnimationFrame(render)
-        camera.position.x = controls.cameraPositionX
-        camera.position.y = controls.cameraPositionY
-        camera.position.z = controls.cameraPositionZ
-        earthMesh.rotation.y += controls.guiRotationY
-        mesh.rotation.x += .035
-        mesh.rotation.y += .085
-        mesh.rotation.z += .135
-        sun.rotation.x += .1
-        pivotPoint.rotation.y += 0.05;
-        pivotPoint2.rotation.y += 0.01;
-        renderer.render(scene, camera)
-
-    }
-
-
-
-
-    var map = {};
-    onkeydown = onkeyup = function(e){
-        console.log(camera.getWorldDirection())
-        e = e || event;
-        map[e.key] = e.type == 'keydown';
-        if (map["a"]) {
-            e.preventDefault();
-            camera.rotateZ(3 * .0174533);
-        }
-        if (map["w"]) {
-            e.preventDefault();
-            controls.cameraPositionX += 15 * (camera.getWorldDirection().x);
-            controls.cameraPositionY += 15 * (camera.getWorldDirection().y);
-            controls.cameraPositionZ += 15 * (camera.getWorldDirection().z);
-        }
-        if (map["d"]) {
-            e.preventDefault();
-            camera.rotateZ(-3 * .0174533);
-        }
-        if (map["s"]) {
-            e.preventDefault();
-            controls.cameraPositionX -= 15 * (camera.getWorldDirection().x);
-            controls.cameraPositionY -= 15 * (camera.getWorldDirection().y);
-            controls.cameraPositionZ -= 15 * (camera.getWorldDirection().z);
-        }
-        if (map["ArrowLeft"]) {
-            e.preventDefault();
-            camera.rotateY(3 * .0174533)
-
-        }
-        if (map["ArrowUp"]) {
-            e.preventDefault();
-            camera.rotateX(3 * .0174533)
-        }
-        if (map["ArrowRight"]) {
-            e.preventDefault();
-            camera.rotateY(3 * -.0174533)
-        }
-        if (map["ArrowDown"]) {
-            e.preventDefault();
-            camera.rotateX(3 * -.0174533)
-        }
-        if (map["x"]) {
-            e.preventDefault()
-            camera.lookAt(1, 1, 1);
-        }
-
+function moveCylinders() {
+    for (let x=0; x<cylinder.length; x++) {
+        cylinder[x].translateX(cylinder[x].vectorStore.x * 1);
+        cylinder[x].translateY(cylinder[x].vectorStore.y * 1);
+        cylinder[x].translateZ(cylinder[x].vectorStore.z * 1);
     }
 }
 
-window.onload = initScene();
+var render = function() {
+    var delta = clock.getDelta();
+    controls.update(delta);
+    moveCylinders();
+    requestAnimationFrame(render)
+    renderer.render(scene, camera)
+}
+
+var i = 0;
+var cylinder = []
+
+
+
+var map = {};
+onkeydown = onkeyup = function(e){
+    e = e || event;
+    map[e.key] = e.type == 'keydown';
+//     if (map["a"]) {
+//         e.preventDefault();
+//         camera.rotateZ(3 * .0174533);
+//     }
+//     if (map["w"]) {
+//         e.preventDefault();
+//         controls.cameraPositionX += 15 * (camera.getWorldDirection().x);
+//         controls.cameraPositionY += 15 * (camera.getWorldDirection().y);
+//         controls.cameraPositionZ += 15 * (camera.getWorldDirection().z);
+//     }
+//     if (map["d"]) {
+//         e.preventDefault();
+//         camera.rotateZ(-3 * .0174533);
+//     }
+//     if (map["s"]) {
+//         e.preventDefault();
+//         controls.cameraPositionX -= 15 * (camera.getWorldDirection().x);
+//         controls.cameraPositionY -= 15 * (camera.getWorldDirection().y);
+//         controls.cameraPositionZ -= 15 * (camera.getWorldDirection().z);
+//     }
+//     if (map["ArrowLeft"]) {
+//         e.preventDefault();
+//         camera.rotateY(3 * .0174533)
+//
+//     }
+//     if (map["ArrowUp"]) {
+//         e.preventDefault();
+//         camera.rotateX(3 * .0174533)
+//     }
+//     if (map["ArrowRight"]) {
+//         e.preventDefault();
+//         camera.rotateY(3 * -.0174533)
+//     }
+//     if (map["ArrowDown"]) {
+//         e.preventDefault();
+//         camera.rotateX(3 * -.0174533)
+//     }
+    if (map[" "]) {
+        e.preventDefault()
+        let geometry = new THREE.CylinderGeometry( 2, 2, 34, 32 );
+        let material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
+        // let d = new THREE.vector3();
+        cylinder[i] = new THREE.Mesh( geometry, material );
+        cylinder[i].position.x = camera.position.x;
+        cylinder[i].position.y = camera.position.y;
+        cylinder[i].position.z = camera.position.z;
+
+
+        console.log(camera.getWorldDirection().z);
+
+        // let tmpQuaternion = new THREE.Quaternion();
+        //
+        // tmpQuaternion.set( rotationVector.x * rotMult, this.rotationVector.y * rotMult, this.rotationVector.z * rotMult, 1 ).normalize();
+        // this.object.quaternion.multiply( this.tmpQuaternion );
+
+
+        // cylinder[i].rotation.x = camera.rotation.x;
+        // cylinder[i].rotation.y = camera.rotation.y;
+        // cylinder[i].rotation.z = camera.rotation.z;
+
+
+
+        cylinder[i].vectorStore = {
+            x: camera.getWorldDirection().x * 10,
+            y: camera.getWorldDirection().y * 10,
+            z: camera.getWorldDirection().z * 10,
+        };
+        scene.add(cylinder[i]);
+//         console.log("hi");
+//         // var renderLaser = function() {
+//         //     requestAnimationFrame(render)
+//         //     cylinder[i].position.x += 30 * (camera.getWorldDirection().x);
+//         //     cylinder[i].position.y += 30 * (camera.getWorldDirection().y);
+//         //     cylinder[i].position.z += 30 * (camera.getWorldDirection().z);
+//         // }
+//         // renderLaser();
+        i++
+    }
+//     // if (map["space"])
+//
+}
+
+setInterval(function() {
+}, 1000)
+
+
+
+render();
