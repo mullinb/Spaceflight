@@ -166,6 +166,7 @@ var box = new Physijs.BoxMesh(
 );
 
 box.addEventListener( 'collision', function( other_object, relative_velocity, relative_rotation, contact_normal ) {
+	generateBoom (box.getWorldPosition(), 12);
     scene.remove(box);
 });
 
@@ -177,7 +178,6 @@ scene.add( box );
 // var position = { x : 0, y: 0 }; var target = { x : 0, y: -5000 };
 //
 //
-// var tweenA = new TWEEN.Tween(position).to({x: 100, y: -5000, z: 100}, 5000);
 //
 // var tweenB = new TWEEN.Tween(position).to({x: 0, y: 0, z: 0}, 5000);
 
@@ -205,20 +205,13 @@ scene.add( box );
 
 // tweenA.start();
 
-// function moveCylinders() {
-//     for (let x=0; x<cylinder.length; x++) {
-//         cylinder[x].translateX(cylinder[x].vectorStore.x * 1);
-//         cylinder[x].translateY(cylinder[x].vectorStore.y * 1);
-//         cylinder[x].translateZ(cylinder[x].vectorStore.z * 1);
-//     }
-// }
 
 var render = function() {
     var delta = clock.getDelta();
     controls.update(delta);
     scene.simulate();
     // moveCylinders();
-    // TWEEN.update();
+    TWEEN.update();
 
     renderer.render(scene, camera)
     requestAnimationFrame(render)
@@ -256,9 +249,27 @@ document.addEventListener('keyup', function(e) {
 // $(document).focus(function(e) {
 //   allowed = true;
 // });
+var BoomX = 0;
+var sphere = []
+function generateBoom (position, scale) {
+	var geometry = new THREE.SphereGeometry( 150, 32, 32 );
+	var material = new THREE.MeshLambertMaterial( {color: 0xffff00} );
+	sphere[BoomX] = new THREE.Mesh( geometry, material );
+	sphere[BoomX].position.set(position.x, position.y, position.z);
+	scene.add(sphere[BoomX]);
+	var tween = new TWEEN.Tween(sphere[BoomX].scale).to({x: scale, y: scale, z: scale}, 1100);
+	tween.easing(TWEEN.Easing.Cubic.Out)
+	tween.start();
+	let self = sphere[BoomX]
+	setTimeout(function() {
+		scene.remove( self );
+	}, 900)
+
+}
+
 
 function generateBullet () {
-
+	console.log(gun.getWorldPosition());
     var merged = new THREE.Geometry();
     var cyl = new THREE.CylinderGeometry(30, 30, 210);
     var top = new THREE.CylinderGeometry(30, 20, 50);
@@ -288,16 +299,22 @@ function generateBullet () {
     cylinder[i].setRotationFromEuler(gun.getWorldRotation());
     cylinder[i].translateY(-280);
 
+	cylinder[i].setCcdMotionThreshold(200);
+	cylinder[i].setCcdSweptSphereRadius(20);
 
     cylinder[i].addEventListener('ready', function() {
         let self = cylinder[i];
         setTimeout(function() {
+			generateBoom (self.position, 6)
             scene.remove( self );
-
         }, 3000)
         // this.applyCentralImpulse(new THREE.Vector3(camera.getWorldDirection().x * 100000000000, camera.getWorldDirection().y * 100000000000, camera.getWorldDirection().z * 100000000000));
-        var force = new THREE.Vector3(camera.getWorldDirection().x * bulletSpeed, camera.getWorldDirection().y * bulletSpeed, camera.getWorldDirection().z * bulletSpeed);
+        var force = new THREE.Vector3((camera.getWorldDirection().x * bulletSpeed), (camera.getWorldDirection().y * bulletSpeed), (camera.getWorldDirection().z * bulletSpeed));
+		var randomizer = ((Math.random()-.5) * bulletSpeed/60)
+		var randomForce = new THREE.Vector3(randomizer, randomizer, randomizer)
+		console.log(force, randomForce)
         cylinder[i].applyCentralImpulse(force);
+		cylinder[i].applyCentralImpulse(randomForce);
         i++
     });
     scene.add(cylinder[i]);
