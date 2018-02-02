@@ -243,7 +243,7 @@ document.addEventListener('keydown', function(e) {
   if (e.key === " ") {
       e.preventDefault()
       generateBullet();
-      timer = setInterval(generateBullet, 166);
+      timer = setInterval(generateBullet, 266);
   }
 });
 
@@ -290,8 +290,10 @@ function generateBullet () {
 
 
     cylinder[i].addEventListener('ready', function() {
+		gunBang();
         let self = cylinder[i];
         setTimeout(function() {
+			explosionBang(100, self.getWorldPosition().distanceTo(camera.getWorldPosition()))
             scene.remove( self );
 
         }, 3000)
@@ -313,6 +315,39 @@ function handleWindowResize() {
     camera.aspect = WIDTH / HEIGHT;
     camera.updateProjectionMatrix();
 }
+
+var gunshot = new Audio("gunshot.mp3");
+gunshot.preload = 'auto';
+gunshot.load();
+
+function gunBang() {
+  var gun=gunshot.cloneNode();
+  gun.currentTime=.9;
+  gun.play();
+  setTimeout(function() {
+	  gun.pause()
+  }, 3600)
+}
+
+var explosion = new Audio("explosion.wav");
+explosion.preload = 'auto';
+explosion.load();
+
+
+function explosionBang(size, distance) {
+	console.log(size/(Math.pow(distance, 2)) * 10e7)
+	var expls=explosion.cloneNode();
+	expls.play()
+}
+
+// function gunBang(){
+// 	var gunshot = document.querySelector("#gunshot");
+// 	   gunshot.addEventListener("ended", function () {
+// 		   document.removeChild(this);
+// 	   }, false);
+// 	   gunshot.currentTime=.9;
+// 	   gunshot.play();
+//    }
 
 window.addEventListener('resize', handleWindowResize);
 
