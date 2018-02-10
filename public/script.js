@@ -26,9 +26,12 @@ container.appendChild( renderer.domElement );
     camera.position.set( 500, 500, 500 );
 
     var gun = new THREE.Mesh(
-        new THREE.CylinderGeometry (40, 40, 300),
-        new THREE.MeshPhongMaterial({ color: 0x97ff03})
+        new THREE.CylinderGeometry (40, 40, 500, 30, 30),
+        new THREE.MeshStandardMaterial({
+				map: new THREE.TextureLoader().load('/metal.jpg')
+			})
     )
+	//     material.map = new THREE.TextureLoader().load('/earthmap4k.jpg');
 
     gun.position.z = -250;
     gun.position.x = 120;
@@ -52,11 +55,11 @@ container.appendChild( renderer.domElement );
 
 
 
-    var light = new THREE.AmbientLight(0xFFFFFF, .2)
+    var light = new THREE.AmbientLight(0xFFFFFF, 1)
 
     scene.add(light)
 
-    var light = new THREE.PointLight(0xFFFFFF, 3);
+    var light = new THREE.PointLight(0xFFFFFF, 1);
     light.position.set( 100, 0, 100 );
     scene.add(light)
     light.castShadow = true;
@@ -166,6 +169,7 @@ var box = new Physijs.BoxMesh(
 );
 
 box.addEventListener( 'collision', function( other_object, relative_velocity, relative_rotation, contact_normal ) {
+	generateBoom (box.getWorldPosition(), 12);
     scene.remove(box);
 });
 
@@ -177,7 +181,6 @@ scene.add( box );
 // var position = { x : 0, y: 0 }; var target = { x : 0, y: -5000 };
 //
 //
-// var tweenA = new TWEEN.Tween(position).to({x: 100, y: -5000, z: 100}, 5000);
 //
 // var tweenB = new TWEEN.Tween(position).to({x: 0, y: 0, z: 0}, 5000);
 
@@ -205,20 +208,13 @@ scene.add( box );
 
 // tweenA.start();
 
-// function moveCylinders() {
-//     for (let x=0; x<cylinder.length; x++) {
-//         cylinder[x].translateX(cylinder[x].vectorStore.x * 1);
-//         cylinder[x].translateY(cylinder[x].vectorStore.y * 1);
-//         cylinder[x].translateZ(cylinder[x].vectorStore.z * 1);
-//     }
-// }
 
 var render = function() {
     var delta = clock.getDelta();
     controls.update(delta);
     scene.simulate();
     // moveCylinders();
-    // TWEEN.update();
+    TWEEN.update();
 
     renderer.render(scene, camera)
     requestAnimationFrame(render)
@@ -256,9 +252,39 @@ document.addEventListener('keyup', function(e) {
 // $(document).focus(function(e) {
 //   allowed = true;
 // });
+var BoomX = 0;
+var sphere = []
+var boomLight = [];
+function generateBoom (position, scale) {
+	// boomLight[BoomX] = new THREE.PointLight( 0xEEEEEE, 1, 100000 );
+	// boomLight[BoomX].position.set(position.x, position.y, position.z);
+	// scene.add(boomLight[BoomX])
+	var int = parseInt("0x" + getRandomColor("#EEEEEE","#FFFFFF"), 16)
+	console.log(int, " this is int")
+	var geometry = new THREE.SphereGeometry( 150, 32, 32 );
+	var material = new THREE.MeshLambertMaterial( {color: int } );
+	sphere[BoomX] = new THREE.Mesh( geometry, material );
+	sphere[BoomX].position.set(position.x, position.y, position.z);
+	sphere[BoomX].side = THREE.FrontSide;
+	sphere[BoomX].emissive = 0xEEEEEE;
+	// sphere[BoomX].emissiveIntensity = 1;
+	scene.add(sphere[BoomX]);
+	var tween = new TWEEN.Tween(sphere[BoomX].scale).to({x: scale, y: scale, z: scale}, 1100);
+	tween.easing(TWEEN.Easing.Cubic.Out)
+	tween.start();
+	let self = sphere[BoomX]
+	let selfLight = boomLight[BoomX]
+	setTimeout(function() {
+		scene.remove( selfLight );
+	}, 300)
+	setTimeout(function() {
+		scene.remove( self );
+	}, 900)
+}
+
 
 function generateBullet () {
-
+	recoilGun();
     var merged = new THREE.Geometry();
     var cyl = new THREE.CylinderGeometry(30, 30, 210);
     var top = new THREE.CylinderGeometry(30, 20, 50);
@@ -272,40 +298,92 @@ function generateBullet () {
     merged.merge(top);
     merged.merge(bot);
     merged.merge(cyl);
-    var material = new THREE.MeshPhongMaterial( {color: 0xff0000} );
-    // let d = new THREE.vector3();
+    var material = new THREE.MeshPhongMaterial( {color: 0x383b3a} );
+	material.map = new THREE.TextureLoader().load('/bullet1.jpg');
+
     cylinder[i] = new Physijs.CapsuleMesh(merged, material, 1);
     gun.add(cylinder[i]);
     cylinder[i].position.x = gun.getWorldPosition().x;
     cylinder[i].position.y = gun.getWorldPosition().y;
     cylinder[i].position.z = gun.getWorldPosition().z;
-
-
-
-    // var quaternion = new THREE.Quaternion();
-    // quaternion.setFromAxisAngle(gun.getWorldDirection(), Math.PI/2);
-
     cylinder[i].setRotationFromEuler(gun.getWorldRotation());
     cylinder[i].translateY(-280);
-
-
+	cylinder[i].setCcdMotionThreshold(200);
+	cylinder[i].setCcdSweptSphereRadius(20);
     cylinder[i].addEventListener('ready', function() {
 		gunBang();
         let self = cylinder[i];
         setTimeout(function() {
 			explosionBang(100, self.getWorldPosition().distanceTo(camera.getWorldPosition()))
+			generateBoom (self.position, 6)
             scene.remove( self );
-
         }, 3000)
-        // this.applyCentralImpulse(new THREE.Vector3(camera.getWorldDirection().x * 100000000000, camera.getWorldDirection().y * 100000000000, camera.getWorldDirection().z * 100000000000));
-        var force = new THREE.Vector3(camera.getWorldDirection().x * bulletSpeed, camera.getWorldDirection().y * bulletSpeed, camera.getWorldDirection().z * bulletSpeed);
+        var force = new THREE.Vector3((camera.getWorldDirection().x * bulletSpeed), (camera.getWorldDirection().y * bulletSpeed), (camera.getWorldDirection().z * bulletSpeed));
+		var randomizer = ((Math.random()-.5) * bulletSpeed/60)
+		var randomForce = new THREE.Vector3(randomizer, randomizer, randomizer)
+		console.log(force, randomForce)
         cylinder[i].applyCentralImpulse(force);
+		cylinder[i].applyCentralImpulse(randomForce);
         i++
     });
     scene.add(cylinder[i]);
 }
 
+function recoilGun () {
+	var position = {x: 0, y: 0, z:-200};
+	var tweenA = new TWEEN.Tween(position).to({x: 50, y: 50, z: -100}, 200);
+	var tweenB = new TWEEN.Tween(position).to({x: 50, y: 50, z: -200}, 100);
+	tweenA.easing(TWEEN.Easing.Elastic.Out)
+	tweenA.onUpdate(function(){
+	    gun.position.z = position.z;
+	})
+	tweenB.onUpdate(function() {
+		gun.position.z = position.z;
+	})
+	tweenA.chain(tweenB)
+	tweenA.start();
+}
 
+// function muzzleFlash () {
+//
+// }
+
+
+
+
+var gunshot = new Audio("gunshot.mp3");
+gunshot.preload = 'auto';
+gunshot.load();
+
+function gunBang() {
+  var bang=gunshot.cloneNode();
+  bang.currentTime=.95;
+  bang.play();
+  setTimeout(function() {
+	  bang.pause()
+  }, 3500)
+}
+
+var explosion = new Audio("explosion.wav");
+explosion.preload = 'auto';
+explosion.load();
+
+
+function explosionBang(size, distance) {
+	console.log(((distance / 1e2)));
+	var expls=explosion.cloneNode();
+	expls.currentTime=.1;
+	setTimeout(function(){
+		expls.play();
+	}, (distance / 1e2))
+	expls.volume = (((size/distance * 10) * 3) < 1) ? ((size/distance * 10) * 3) : 1;
+}
+
+function getRandomColor(start, end){
+    var min=parseInt(start.replace("#",""), 16);
+    var max=parseInt(end.replace("#",""), 16);
+    return ""+Math.floor((Math.random() * (max - min) + min)).toString(16).toUpperCase();
+}
 
 function handleWindowResize() {
     // update height and width of the renderer and the camera
@@ -315,39 +393,6 @@ function handleWindowResize() {
     camera.aspect = WIDTH / HEIGHT;
     camera.updateProjectionMatrix();
 }
-
-var gunshot = new Audio("gunshot.mp3");
-gunshot.preload = 'auto';
-gunshot.load();
-
-function gunBang() {
-  var gun=gunshot.cloneNode();
-  gun.currentTime=.9;
-  gun.play();
-  setTimeout(function() {
-	  gun.pause()
-  }, 3600)
-}
-
-var explosion = new Audio("explosion.wav");
-explosion.preload = 'auto';
-explosion.load();
-
-
-function explosionBang(size, distance) {
-	console.log(size/(Math.pow(distance, 2)) * 10e7)
-	var expls=explosion.cloneNode();
-	expls.play()
-}
-
-// function gunBang(){
-// 	var gunshot = document.querySelector("#gunshot");
-// 	   gunshot.addEventListener("ended", function () {
-// 		   document.removeChild(this);
-// 	   }, false);
-// 	   gunshot.currentTime=.9;
-// 	   gunshot.play();
-//    }
 
 window.addEventListener('resize', handleWindowResize);
 

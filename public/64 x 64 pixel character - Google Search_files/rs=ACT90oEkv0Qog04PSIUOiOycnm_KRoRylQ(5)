@@ -1,0 +1,13 @@
+/* _GlobalPrefix_ */
+/* _Module_:N6VQ1 */
+try{
+s_HG().jJ("N6VQ1");var s_i9=function(a){s_jP.call(this,a.Wn);this.Ca=this.Ea=this.$=this.Nb=null;this.Da=!1};s_a(s_i9,s_jP);s_i9.Xf=s_jP.Xf;s_i9.prototype.w7=function(){s_H.qc(s_e(this.Wa,this));s_S8b(s_e(function(){var a=s_n("exyurl");return s_R8b(this.$,this.Ea,a,1E6)},this))};s_kP(s_i9.prototype,"gKRGUe",function(){return this.w7});
+var s_jac=function(a,b){if("INPUT"==b.tagName){var c=s_q("exyhlt",a.Nb);s_z(c,"exyhhl",b!=a.$);s_H.setTimeout(s_e(function(){s_x(c,"exytn");s_H.qc(s_e(function(){s_y(c,"exytn")},this))},a),150)}};s_i9.prototype.Ga=function(a){27==a.keyCode&&this.Wa()};s_i9.prototype.Ia=function(a){9==a.keyCode&&a.shiftKey&&(a.preventDefault(),this.Ca.focus())};s_i9.prototype.Ja=function(a){9!=a.keyCode||a.shiftKey||(a.preventDefault(),this.$.focus())};
+var s_kac=function(a,b){s_l(b,"keyup",s_e(function(a){27==a.keyCode?this.Wa():13==a.keyCode&&this.w7()},a))};s_i9.prototype.OU=function(a){s_jac(this,a.jRa.el())};s_kP(s_i9.prototype,"kSv20e",function(){return this.OU});s_i9.prototype.aD=function(){this.Wa()};s_kP(s_i9.prototype,"xp3IKd",function(){return this.aD});
+s_i9.prototype.Wa=function(){this.Nb.style.display="none";var a=s_Q8b(decodeURIComponent(this.$.value)),b=s_Q8b(decodeURIComponent(this.Ea.value));a=Math.round(a);b=Math.round(b);this.$.value=0<a?a:"";this.Ea.value=0<b?b:""};
+s_i9.prototype.$ya=function(a){a=a.jRa.el();this.Da?(this.Nb.style.display="block",this.$.focus()):(s_n("exycont")||(this.Ea=this.$=this.Ca=this.Nb=null,a=s_q("exycont",a.parentElement),a.style.display="block",this.Nb=a,this.Ca=s_n("exygo"),this.$=s_q("exyw",a),this.Ea=s_q("exyh",a),s_l(this.Nb,"keyup",s_e(this.Ga,this)),s_l(this.$,"keydown",s_e(this.Ia,this)),s_l(this.Ca,"keydown",s_e(this.Ja,this)),s_kac(this,this.$),s_kac(this,this.Ea),this.Da=!0),s_q("exyw").focus())}; s_kP(s_i9.prototype,"OBeTfb",function(){return this.$ya});s_i9.prototype.f5=function(){this.Da&&(this.Wa(),this.Da=!1)};s_kP(s_i9.prototype,"k4Iseb",function(){return this.f5});s_$R(s_Asa,s_i9);
+
+s_HG().AQ("N6VQ1");s_HG().aK();
+}catch(e){_DumpException(e)}
+/* _GlobalSuffix_ */
+// Google Inc.
