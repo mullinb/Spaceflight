@@ -4,8 +4,15 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "cookie-session": "^2.0.0-beta.3",
     "express": "^4.16.2",
-    "three-fly-controls": "^1.1.0"
+    "express-session": "^1.15.6",
+    "express-socket.io-session": "^1.3.2",
+    "nodejs-physijs": "^0.1.5",
+    "socket.io": "^2.0.4",
+    "three": "^0.89.0",
+    "three-fly-controls": "^1.1.0",
+    "tween.js": "^16.6.0"
   },
   "devDependencies": {},
   "scripts": {
