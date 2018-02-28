@@ -1,8 +1,8 @@
 'use strict';
 
 
-	Physijs.scripts.worker = '/libs/physijs_worker.js';
-	Physijs.scripts.ammo = `http://chandlerprall.github.io/Physijs/examples/js/ammo.js`;
+Physijs.scripts.worker = '/libs/physijs_worker.js';
+Physijs.scripts.ammo = `http://chandlerprall.github.io/Physijs/examples/js/ammo.js`;
 
 var container, stats;
 var camera, controls, scene, renderer;
@@ -18,94 +18,49 @@ renderer.setSize(window.innerWidth, window.innerHeight)
 container.appendChild( renderer.domElement );
 
 
-    scene = new Physijs.Scene;
-    scene.setGravity(new THREE.Vector3(0,-1000,0));
+scene = new Physijs.Scene;
+scene.setGravity(new THREE.Vector3(0,-1000,0));
 
-    var camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.8, 12600 * 100000)
+var camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.8, 12600 * 100000)
 
-    camera.position.set( 500, 500, 500 );
+camera.position.set( 500, 500, 500 );
 
-    var gun = new THREE.Mesh(
-        new THREE.CylinderGeometry (40, 40, 300),
-        new THREE.MeshPhongMaterial({ color: 0x97ff03})
-    )
+var gun = new THREE.Mesh(
+new THREE.CylinderGeometry (40, 40, 300),
+new THREE.MeshPhongMaterial({ color: 0x97ff03})
+)
 
-    gun.position.z = -250;
-    gun.position.x = 120;
-    gun.position.y = 90;
-    gun.rotateX(Math.PI/2);
+gun.position.z = -250;
+gun.position.x = 120;
+gun.position.y = 90;
+gun.rotateX(Math.PI/2);
 
-    camera.add(gun)
+camera.add(gun)
 
-    scene.add(camera);
-
-
-    var controls = new THREE.FlyControls(camera, container);
-    controls.movementSpeed = 9505.3;
-    controls.domElement = container;
-    controls.rollSpeed = Math.PI / 6;
-    controls.autoForward = false;
-    controls.dragToLook = false;
-
-    // renderer.shadowMapEnabled = true;
-    // renderer.shadowMapType = THREE.PCFSoftShadowMap;
+scene.add(camera);
 
 
+var controls = new THREE.FlyControls(camera, container);
+controls.movementSpeed = 9505.3;
+controls.domElement = container;
+controls.rollSpeed = Math.PI / 6;
+controls.autoForward = false;
+controls.dragToLook = false;
 
-    var light = new THREE.AmbientLight(0xFFFFFF, .2)
-
-    scene.add(light)
-
-    var light = new THREE.PointLight(0xFFFFFF, 3);
-    light.position.set( 100, 0, 100 );
-    scene.add(light)
-    light.castShadow = true;
+// renderer.shadowMapEnabled = true;
+// renderer.shadowMapType = THREE.PCFSoftShadowMap;
 
 
-//
-//     var geometry = new THREE.SphereGeometry( 10, 32, 32 );
-//     var material = new THREE.MeshBasicMaterial();
-//     material.map = new THREE.TextureLoader().load('/earthmap4k.jpg');
-//     var earthMesh = new THREE.Mesh(geometry, material);
-//     earthMesh.rotation.y = 0,401426;
-//     scene.add(earthMesh);
-//
-//     var ringGeometry = new THREE.RingGeometry( 15,17 , 40, 40 );
-//     var ringMaterial = new THREE.MeshStandardMaterial( {color: 0x9a846c, side: THREE.DoubleSide} );
-//     var mesh = new THREE.Mesh( ringGeometry, ringMaterial );
-//     scene.add( mesh );
-//
-//     var geometry = new THREE.SphereGeometry( 40, 32, 32 );
-//     var material = new THREE.MeshBasicMaterial( {color: 0xffed00, side: THREE.BackSide} );
-//     var sun = new THREE.Mesh(geometry, material);
-//
-//     sun.position.set (200, 0, 200);
-//     scene.add( sun );
-//
-//     var geometry = new THREE.SphereGeometry( 4, 32, 32 );
-//     var material = new THREE.MeshBasicMaterial();
-//     material.map = new THREE.TextureLoader().load('/moonmap4k.jpg');
-//     var moon = new THREE.Mesh(geometry, material);
-//
-//     moon.position.set (0, 0, -30);
-//
-//     pivotPoint = new THREE.Object3D();
-//     pivotPoint2 = new THREE.Object3D();
-//
-// scene.add(moon);
-// earthMesh.add(pivotPoint2);
-// pivotPoint2.add(sun);
-// pivotPoint2.add(light);
-//
-//     pivotPoint.add(moon);
-//     earthMesh.add(pivotPoint);
-//
-// earthMesh.castShadow = true;
-// earthMesh.receiveShadow = true;
-// moon.castShadow = true;
-// moon.receiveShadow = true;
-// mesh.castShadow = true;
-// mesh.receiveShadow = true;
+
+var light = new THREE.AmbientLight(0xFFFFFF, .2)
+
+scene.add(light)
+
+var light = new THREE.PointLight(0xFFFFFF, 3);
+light.position.set( 100, 0, 100 );
+scene.add(light)
+light.castShadow = true;
+
 
 var floorGeometry = new THREE.BoxGeometry( 25000, 250, 25000 );
 var floorMaterial = new THREE.MeshBasicMaterial( { side: THREE.BackSide} );
@@ -173,45 +128,7 @@ box.setCcdMotionThreshold(5);
 box.setCcdSweptSphereRadius(1);
 
 scene.add( box );
-//
-// var position = { x : 0, y: 0 }; var target = { x : 0, y: -5000 };
-//
-//
-// var tweenA = new TWEEN.Tween(position).to({x: 100, y: -5000, z: 100}, 5000);
-//
-// var tweenB = new TWEEN.Tween(position).to({x: 0, y: 0, z: 0}, 5000);
 
-
-
-//
-// tweenA.onUpdate(function(){
-//     box.position.x = position.x;
-//     box.position.y = position.y;
-// });
-//
-// tweenB.onUpdate(function(){
-//     box.position.x = position.x;
-//     box.position.y = position.y;
-// });
-//
-//
-// tweenA.easing(TWEEN.Easing.Bounce.Out)
-//
-// tweenB.easing(TWEEN.Easing.Cubic.Out)
-//
-//
-// tweenA.chain(tweenB);
-// tweenB.chain(tweenA);
-
-// tweenA.start();
-
-// function moveCylinders() {
-//     for (let x=0; x<cylinder.length; x++) {
-//         cylinder[x].translateX(cylinder[x].vectorStore.x * 1);
-//         cylinder[x].translateY(cylinder[x].vectorStore.y * 1);
-//         cylinder[x].translateZ(cylinder[x].vectorStore.z * 1);
-//     }
-// }
 
 var render = function() {
     var delta = clock.getDelta();
@@ -223,7 +140,6 @@ var render = function() {
     renderer.render(scene, camera)
     requestAnimationFrame(render)
 }
-
 
 var i = 0;
 var cylinder = []
@@ -253,9 +169,7 @@ document.addEventListener('keyup', function(e) {
         allowed = true;
     }
 });
-// $(document).focus(function(e) {
-//   allowed = true;
-// });
+
 
 function generateBullet () {
 
@@ -280,10 +194,6 @@ function generateBullet () {
     cylinder[i].position.y = gun.getWorldPosition().y;
     cylinder[i].position.z = gun.getWorldPosition().z;
 
-
-
-    // var quaternion = new THREE.Quaternion();
-    // quaternion.setFromAxisAngle(gun.getWorldDirection(), Math.PI/2);
 
     cylinder[i].setRotationFromEuler(gun.getWorldRotation());
     cylinder[i].translateY(-280);
