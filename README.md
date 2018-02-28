@@ -1,8 +1,10 @@
 # spaceflight
 
-Spaceflight on Three.js  Basic browser implementation of first-person shooter
+<h2>Spaceflight on Three.js</h2>  
+
+<h4>Basic browser implementation of first-person shooter
 controls in 3D space, with physics-based projectiles and
-animated firing motion. 
+animated firing motion.</h4>
 
 After initially experimenting with Three.js’ orbital controls in class, I immediately was motivated to program first-person controls. This I was able to do, but the movement was jittery (moving some number of in-game units instantly rather than smoothly) and a little bit inconsistent.   Fortunately Three.js has customizable flight controls as part of its native library, which are what you see in action here. 
 
