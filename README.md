@@ -1,6 +1,8 @@
 # spaceflight
 
-<h2>Spaceflight on Three.js</h2>  
+<a href="http://spaceflight.herokuapp.com/"><h2>Spaceflight on Three.js</h2></a>  
+
+<img src="https://s3.amazonaws.com/fluxlymoppings/pics/Screen+Shot+2018-02-28+at+17.01.31.png">
 
 <h4>Basic browser implementation of first-person shooter
 controls in 3D space, with physics-based projectiles and
@@ -10,4 +12,11 @@ After initially experimenting with Three.js’ orbital controls in class, I imme
 
 Physi.js, a physics library for Three.js, governs the bullet motion and collision detection. A few rudimentary textures were added to the gun barrel and to the bullets, along with some sounds taken from freesound.org. 
 
+<img src="https://s3.amazonaws.com/fluxlymoppings/pics/Screen+Shot+2018-02-28+at+17.01.15.png">
+
 SPICED featured an earlier version of this game in a brief video on their Instagram. I would love to complete this project as 2-player duelling game; my initial efforts to set-up server-side physics authority were frustrated by Three’s client-side focus. I am confident a p2p solution is very possible. 
+
+<a href="http://spaceflight.herokuapp.com/">Play Spaceflight</a> on Heroku.
+
+See the brief vid on instagram:
+https://www.instagram.com/p/BesmBAED28z/?taken-by=spicedacademy
