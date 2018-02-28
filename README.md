@@ -18,5 +18,5 @@ SPICED featured an earlier version of this game in a brief video on their Instag
 
 <a href="http://spaceflight.herokuapp.com/">Play Spaceflight</a> on Heroku.
 
-See the brief vid on instagram:
+See the vid on instagram:
 https://www.instagram.com/p/BesmBAED28z/?taken-by=spicedacademy
