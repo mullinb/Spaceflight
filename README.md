@@ -2,7 +2,7 @@
 
 <a href="http://spaceflight.herokuapp.com/"><h2>Spaceflight on Three.js</h2></a>  
 
-<img src="https://s3.amazonaws.com/fluxlymoppings/pics/Screen+Shot+2018-02-28+at+17.01.31.png">
+<img src="https://s3.amazonaws.com/fluxlymoppings/pics/Spaceflight.gif">
 
 <h4>Basic browser implementation of first-person shooter
 controls in 3D space, with physics-based projectiles and
