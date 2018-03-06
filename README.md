@@ -1,4 +1,4 @@
-#<a href="http://spaceflight.herokuapp.com/"><h2>Spaceflight on Three.js</h2></a>#
+#<a href="http://spaceflight.herokuapp.com/">Spaceflight on Three.js</a>#
 
 <div align="center">
 <img src="https://s3.amazonaws.com/fluxlymoppings/pics/Spaceflight.gif">
