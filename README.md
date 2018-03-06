@@ -21,3 +21,13 @@ SPICED featured an earlier version of this game in a brief video on their Instag
 
 See the vid on instagram:
 https://www.instagram.com/p/BesmBAED28z/?taken-by=spicedacademy
+
+
+## Technologies:
+<ul>
+  <li> Three.js </li>
+  <li> Physi.js </li>
+  <li> tween.js </li>
+  <li> Node.js </li>
+  <li> express.js </li>
+</ul>
